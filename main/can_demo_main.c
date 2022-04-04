@@ -52,8 +52,8 @@
 
 CAN_device_t CAN_cfg = {
 	.speed = CONFIG_SELECTED_CAN_SPEED,		 // CAN Node baudrade
-	.tx_pin_id = CONFIG_ESP_CAN_TXD_PIN_NUM, // CAN TX pin example menuconfig GPIO_NUM_5
-	.rx_pin_id = CONFIG_ESP_CAN_RXD_PIN_NUM, // CAN RX pin example menuconfig GPIO_NUM_35 ( Olimex )
+	.tx_pin_id = 21,//CONFIG_ESP_CAN_TXD_PIN_NUM, // CAN TX pin example menuconfig GPIO_NUM_5
+	.rx_pin_id = 22,//CONFIG_ESP_CAN_RXD_PIN_NUM, // CAN RX pin example menuconfig GPIO_NUM_35 ( Olimex )
 	.rx_queue = NULL,						 // FreeRTOS queue for RX frames
 };
 
