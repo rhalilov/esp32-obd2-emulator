@@ -60,6 +60,7 @@ PATCH `/api/vehicle`
     - vin
   - `value`
 - Example (CURL): `curl -XPATCH -H 'Content-Type: application/x-www-form-urlencoded' -d 'name=speed&value=50' '/api/vehicle'`
+ curl -XPATCH http://192.168.4.1/api/vehicle --data 'name=speed&value=77'
 
 ## Acknowledgements
 

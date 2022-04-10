@@ -160,6 +160,93 @@ static int CAN_write_frame_phy(const CAN_frame_t *p_frame) {
 	return 0;
 }
 
+void twai_regs_print(void)
+{
+	printf("MODULE_CAN->MOD.B.RM = %x                 //MOD.0 Reset Mode\n",
+												MODULE_CAN->MOD.B.RM);
+
+	printf("MODULE_CAN->MOD.B.LOM = %x                //MOD.1 Listen Only Mode\n",
+												MODULE_CAN->MOD.B.LOM);
+
+	printf("MODULE_CAN->MOD.B.STM = %x                //MOD.2 Self Test Mode\n",
+												MODULE_CAN->MOD.B.STM);
+
+	printf("MODULE_CAN->MOD.B.AFM = %x                //MOD.3 Acceptance Filter Mode\n",
+												MODULE_CAN->MOD.B.AFM);
+
+	printf("MODULE_CAN->CDR.B.COD = %x                //CDR[2:0] CLKOUT frequency selector based of fOSC\n",
+												MODULE_CAN->CDR.B.COD);
+
+	printf("MODULE_CAN->CDR.B.COFF = %d               //CDR.3 CLKOUT off\n",
+												MODULE_CAN->CDR.B.COFF);
+
+	printf("MODULE_CAN->CDR.B.CAN_M = %d             //CDR.7 Register Layout. Basic:0 Extended:1 (PELICAN mode)\n",
+												MODULE_CAN->CDR.B.CAN_M);
+
+	printf("MODULE_CAN->IER.B.RIE = %d              //IER.0 Receive Interrupt Enable\n",
+												MODULE_CAN->IER.B.RIE);
+
+	printf("MODULE_CAN->IER.B.TIE = %d              //IER.1 Transmit Interrupt Enable\n",
+												MODULE_CAN->IER.B.TIE);
+
+	printf("MODULE_CAN->IER.B.EIE = %d              //IER.2 Error Interrupt Enable\n",
+												MODULE_CAN->IER.B.EIE);
+
+	printf("MODULE_CAN->IER.B.DOIE = %d              //IER.3 Data Overrun Interrupt Enable\n",
+												MODULE_CAN->IER.B.DOIE);
+
+	printf("MODULE_CAN->IER.B.BPR_DIV = %d              //IER.4 prescale BRP by 2. ESP32 Rev2 and later\n",
+												MODULE_CAN->IER.B.WUIE);
+
+	printf("MODULE_CAN->IER.B.EPIE = %d              //IER.5 Error Passive Interrupt Enable\n",
+												MODULE_CAN->IER.B.EPIE);
+
+	printf("MODULE_CAN->IER.B.ALIE = %d              //IER.6 Arbitration Lost Interrupt Enable\n",
+												MODULE_CAN->IER.B.ALIE);
+
+	printf("MODULE_CAN->IER.B.BEIE = %d              //IER.7 Bus Error Interrupt Enable\n",
+												MODULE_CAN->IER.B.BEIE);
+
+	printf("MODULE_CAN->BTR0.B.BRP = %d              //BTR0[5:0] Baud Rate Prescaler\n",
+												MODULE_CAN->BTR0.B.BRP);
+
+	printf("MODULE_CAN->BTR0.B.SJW = %d              //BTR0[7:6] Synchronization Jump Width\n",
+												MODULE_CAN->BTR0.B.SJW);
+
+	printf("MODULE_CAN->BTR1.B.TSEG1 = %d            //BTR1[3:0] Timing Segment 1\n",
+												MODULE_CAN->BTR1.B.TSEG1);
+
+	printf("MODULE_CAN->BTR1.B.TSEG2 = %d            //BTR1[6:4] Timing Segment 2\n",
+												MODULE_CAN->BTR1.B.TSEG2);
+
+	printf("MODULE_CAN->BTR1.B.SAM = %d              //BTR1.7 Sampling\n",
+												MODULE_CAN->BTR1.B.SAM);
+
+	printf("MODULE_CAN->MBX_CTRL.ACC.CODE[0] = 0x%02x //Acceptance Code (Message ID)\n",
+												MODULE_CAN->MBX_CTRL.ACC.CODE[0]);
+
+	printf("MODULE_CAN->MBX_CTRL.ACC.CODE[1] = 0x%02x \n",
+												MODULE_CAN->MBX_CTRL.ACC.CODE[1]);
+
+	printf("MODULE_CAN->MBX_CTRL.ACC.CODE[2] = 0x%02x \n",
+												MODULE_CAN->MBX_CTRL.ACC.CODE[2]);
+
+	printf("MODULE_CAN->MBX_CTRL.ACC.CODE[3] = 0x%02x \n",
+												MODULE_CAN->MBX_CTRL.ACC.CODE[3]);
+
+	printf("MODULE_CAN->MBX_CTRL.ACC.MASK[0] = 0x%02x //Acceptance Mask\n",
+												MODULE_CAN->MBX_CTRL.ACC.MASK[0]);
+
+	printf("MODULE_CAN->MBX_CTRL.ACC.MASK[1] = 0x%02x \n",
+												MODULE_CAN->MBX_CTRL.ACC.MASK[1]);
+
+	printf("MODULE_CAN->MBX_CTRL.ACC.MASK[2] = 0x%02x \n",
+												MODULE_CAN->MBX_CTRL.ACC.MASK[2]);
+
+	printf("MODULE_CAN->MBX_CTRL.ACC.MASK[3] = 0x%02x \n",
+												MODULE_CAN->MBX_CTRL.ACC.MASK[3]);
+}
+
 int CAN_init() {
 
 	// Time quantum
@@ -244,6 +331,8 @@ int CAN_init() {
 
 	// clear interrupt flags
 	(void) MODULE_CAN->IR.U;
+
+	twai_regs_print();
 
 	// install CAN ISR
 	esp_intr_alloc(ETS_CAN_INTR_SOURCE, 0, CAN_isr, NULL, NULL);

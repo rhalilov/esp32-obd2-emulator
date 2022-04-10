@@ -60,9 +60,9 @@ CAN_device_t CAN_cfg = {
 // Queue for CAN multi-frame packets
 uint8_t can_flow_queue[5][8];
 
-unsigned int vehicle_speed = 0;
-float vehicle_rpm = 0;
-float vehicle_throttle = 0;
+unsigned int vehicle_speed = 50;
+float vehicle_rpm = 1000;
+float vehicle_throttle = 10;
 char vehicle_vin[17] = "ESP32OBD2EMULATOR";
 
 static EventGroupHandle_t wifi_event_group;
@@ -204,13 +204,13 @@ void task_CAN(void *pvParameters)
 	CAN_init();
 	printf("CAN initialized...\n");
 
-	while (1)
-	{
+
+	while (1) {
 		//receive next CAN frame from queue
-		if (xQueueReceive(CAN_cfg.rx_queue, &__RX_frame, 3 * portTICK_PERIOD_MS) == pdTRUE)
-		{
-			printf("\nFrame from : 0x%08x, DLC %d, RTR %d, FF %d \n", __RX_frame.MsgID, __RX_frame.FIR.B.DLC,
-				   __RX_frame.FIR.B.RTR, __RX_frame.FIR.B.FF);
+		if (xQueueReceive(CAN_cfg.rx_queue, &__RX_frame, 3 * portTICK_PERIOD_MS) == pdTRUE) {
+			printf("\nFrame from : 0x%08x, DLC %d, RTR %d, FF %d \n",
+									__RX_frame.MsgID, __RX_frame.FIR.B.DLC,
+									__RX_frame.FIR.B.RTR, __RX_frame.FIR.B.FF);
 			printf("D0: 0x%02x, ", __RX_frame.data.u8[0]);
 			printf("D1: 0x%02x, ", __RX_frame.data.u8[1]);
 			printf("D2: 0x%02x, ", __RX_frame.data.u8[2]);
@@ -252,10 +252,10 @@ void task_CAN(void *pvParameters)
 
 					// Clear flow control queue
 					memset(can_flow_queue, 0, 40);
-				}
-			}
-		}
-	}
+				} //if (__RX_frame.data.u8[0] == 0x30)
+			} //if (__RX_frame.MsgID ... else ...
+		} //if (xQueueReceive ...
+	} //while (1)
 }
 
 const char *get_filename_ext(const char *filename)

@@ -70,6 +70,8 @@ typedef struct {
 	} data;
 } CAN_frame_t;
 
+void twai_regs_print(void);
+
 /**
  * \brief Initialize the CAN Module
  *

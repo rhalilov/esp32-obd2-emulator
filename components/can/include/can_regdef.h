@@ -90,7 +90,7 @@ typedef struct {
 			unsigned int SM : 1;           /**< \brief MOD.4 Sleep Mode */
 			unsigned int reserved_27 : 27; /**< \brief \internal Reserved */
 		} B;
-	} MOD;
+	} MOD;				/* Address 0 Mode Register*/
 	union {
 		uint32_t U; /**< \brief Unsigned access */
 		struct {
@@ -101,7 +101,7 @@ typedef struct {
 			unsigned int GTS : 1;          /**< \brief CMR.4 Go To Sleep */
 			unsigned int reserved_27 : 27; /**< \brief \internal Reserved */
 		} B;
-	} CMR;
+	} CMR;				/* Address 1 Command Register*/
 	union {
 		uint32_t U; /**< \brief Unsigned access */
 		struct {
@@ -115,7 +115,7 @@ typedef struct {
 			unsigned int BS : 1;           /**< \brief SR.7 Bus Status */
 			unsigned int reserved_24 : 24; /**< \brief \internal Reserved */
 		} B;
-	} SR;
+	} SR;				/* Address 2 Status Register */
 	union {
 		uint32_t U; /**< \brief Unsigned access */
 		struct {
@@ -129,7 +129,7 @@ typedef struct {
 			unsigned int BEI : 1;          /**< \brief IR.7 Bus Error Interrupt */
 			unsigned int reserved_24 : 24; /**< \brief \internal Reserved */
 		} B;
-	} IR;
+	} IR;				/* Address 3 Interrupt Register*/
 	union {
 		uint32_t U; /**< \brief Unsigned access */
 		struct {
@@ -143,7 +143,7 @@ typedef struct {
 			unsigned int BEIE : 1;         /**< \brief IER.7 Bus Error Interrupt Enable */
 			unsigned int reserved_24 : 24; /**< \brief \internal Reserved  */
 		} B;
-	} IER;
+	} IER;				/* Address 4 Interrupt Enable Register*/
 	uint32_t RESERVED0;
 	union {
 		uint32_t U; /**< \brief Unsigned access */
@@ -152,7 +152,7 @@ typedef struct {
 			unsigned int SJW : 2;          /**< \brief BTR0[7:6] Synchronization Jump Width*/
 			unsigned int reserved_24 : 24; /**< \brief \internal Reserved  */
 		} B;
-	} BTR0;
+	} BTR0;			/* Address 6 Bus Timing 0 Register*/
 	union {
 		uint32_t U; /**< \brief Unsigned access */
 		struct {
@@ -161,7 +161,7 @@ typedef struct {
 			unsigned int SAM : 1;          /**< \brief BTR1.7 Sampling*/
 			unsigned int reserved_24 : 24; /**< \brief \internal Reserved  */
 		} B;
-	} BTR1;
+	} BTR1;			/* Address 7 Bus Timing 1 Register*/
 	union {
 		uint32_t U; /**< \brief Unsigned access */
 		struct {
@@ -174,43 +174,43 @@ typedef struct {
 			unsigned int OCTP1 : 1;        /**< \brief OCR.7 Output Control Transistor P1 */
 			unsigned int reserved_24 : 24; /**< \brief \internal Reserved  */
 		} B;
-	} OCR;
-	uint32_t RESERVED1[2];
+	} OCR;					/* Address 8 (Output control not supported) */
+	uint32_t RESERVED1[2]; 	/* Address 9 (Test Register not supported) */
 	union {
 		uint32_t U; /**< \brief Unsigned access */
 		struct {
 			unsigned int ALC : 8;          /**< \brief ALC[7:0] Arbitration Lost Capture */
 			unsigned int reserved_24 : 24; /**< \brief \internal Reserved  */
 		} B;
-	} ALC;
+	} ALC;					/* Address 10 Reserved */
 	union {
 		uint32_t U; /**< \brief Unsigned access */
 		struct {
 			unsigned int ECC : 8;          /**< \brief ECC[7:0] Error Code Capture */
 			unsigned int reserved_24 : 24; /**< \brief \internal Reserved  */
 		} B;
-	} ECC;
+	} ECC;				/* Address 12 Error Code Capture*/
 	union {
 		uint32_t U; /**< \brief Unsigned access */
 		struct {
 			unsigned int EWLR : 8;         /**< \brief EWLR[7:0] Error Warning Limit */
 			unsigned int reserved_24 : 24; /**< \brief \internal Reserved  */
 		} B;
-	} EWLR;
+	} EWLR;				/* EWLR[7:0] Error Warning Limit: Address 13 */
 	union {
 		uint32_t U; /**< \brief Unsigned access */
 		struct {
 			unsigned int RXERR : 8;        /**< \brief RXERR[7:0] Receive Error Counter */
 			unsigned int reserved_24 : 24; /**< \brief \internal Reserved  */
 		} B;
-	} RXERR;
+	} RXERR;			/* Address 14 RX Error Counter Register */
 	union {
 		uint32_t U; /**< \brief Unsigned access */
 		struct {
 			unsigned int TXERR : 8;        /**< \brief TXERR[7:0] Transmit Error Counter */
 			unsigned int reserved_24 : 24; /**< \brief \internal Reserved  */
 		} B;
-	} TXERR;
+	} TXERR;			/* Address 15 TX Error Counter Register*/
 
 	union {
 		struct {
@@ -233,38 +233,45 @@ typedef struct {
 			} TX_RX;                  /**< \brief RX/TX interface */
 		} FCTRL;                      /**< \brief Function control regs */
 	} MBX_CTRL;                       /**< \brief Mailbox control */
+
 	union {
 		uint32_t U; /**< \brief Unsigned access */
 		struct {
 			unsigned int RMC : 8;          /**< \brief RMC[7:0] RX Message Counter */
 			unsigned int reserved_24 : 24; /**< \brief \internal Reserved Enable */
 		} B;
-	} RMC;
+	} RMC;			/* Address 29 RX Message Counter Register*/
+
 	union {
 		uint32_t U; /**< \brief Unsigned access */
 		struct {
 			unsigned int RBSA : 8;         /**< \brief RBSA[7:0] RX Buffer Start Address  */
 			unsigned int reserved_24 : 24; /**< \brief \internal Reserved Enable */
 		} B;
-	} RBSA;
+	} RBSA;			/* Address 30 (RX Buffer Start Address not supported) */
+
 	union {
 		uint32_t U; /**< \brief Unsigned access */
 		struct {
-			unsigned int COD : 3;        /**< \brief CDR[2:0] CLKOUT frequency selector based of fOSC*/
+			unsigned int COD : 3;        /**< \brief CDR[2:0] CLKOUT frequency
+										selector based of fOSC*/
 			unsigned int COFF : 1;       /**< \brief CDR.3 CLKOUT off*/
 			unsigned int reserved_1 : 1; /**< \brief \internal Reserved */
-			unsigned int
-			RXINTEN : 1; /**< \brief CDR.5 This bit allows the TX1 output to be used as a dedicated receive interrupt
-			                output*/
-			unsigned int
-			CBP : 1; /**< \brief CDR.6 allows to bypass the CAN input comparator and is only possible in reset mode.*/
-			unsigned int
-			CAN_M : 1; /**< \brief CDR.7 If CDR.7 is at logic 0 the CAN controller operates in BasicCAN mode. If set to
-			              logic 1 the CAN controller operates in PeliCAN mode. Write access is only possible in reset
-			              mode*/
+			unsigned int RXINTEN : 1; 	/**< \brief CDR.5 This bit allows the
+										TX1 output to be used as a dedicated
+										receive interrupt output*/
+			unsigned int CBP : 1; 		/**< \brief CDR.6 allows to bypass the
+										CAN input comparator and is only
+										possible in reset mode.*/
+			unsigned int CAN_M : 1; 	/**< \brief CDR.7 If CDR.7 is at
+										logic 0 the CAN controller operates in
+										BasicCAN mode. If set to logic 1 the
+										CAN controller operates in PeliCAN mode.
+										Write access is only possible in reset
+			              	  	  	  	mode*/
 			unsigned int reserved_24 : 24; /**< \brief \internal Reserved  */
 		} B;
-	} CDR;
+	} CDR;			/* Address 31 Clock Divider Register */
 	uint32_t IRAM[2];
 } CAN_Module_t;
 
