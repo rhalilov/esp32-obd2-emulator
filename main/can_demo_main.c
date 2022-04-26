@@ -60,9 +60,9 @@ CAN_device_t CAN_cfg = {
 // Queue for CAN multi-frame packets
 uint8_t can_flow_queue[5][8];
 
-unsigned int vehicle_speed = 50;
-float vehicle_rpm = 1000;
-float vehicle_throttle = 10;
+unsigned int vehicle_speed = 100;
+float vehicle_rpm = 2500;
+float vehicle_throttle = 30;
 char vehicle_vin[17] = "ESP32OBD2EMULATOR";
 
 static EventGroupHandle_t wifi_event_group;
@@ -208,18 +208,18 @@ void task_CAN(void *pvParameters)
 	while (1) {
 		//receive next CAN frame from queue
 		if (xQueueReceive(CAN_cfg.rx_queue, &__RX_frame, 3 * portTICK_PERIOD_MS) == pdTRUE) {
-			printf("\nFrame from : 0x%08x, DLC %d, RTR %d, FF %d \n",
+			printf("==============================================================================\n");
+			printf("ID=0x%08x DLC=%d, RTR=%d, FF=%d Data: ",
 									__RX_frame.MsgID, __RX_frame.FIR.B.DLC,
 									__RX_frame.FIR.B.RTR, __RX_frame.FIR.B.FF);
-			printf("D0: 0x%02x, ", __RX_frame.data.u8[0]);
-			printf("D1: 0x%02x, ", __RX_frame.data.u8[1]);
-			printf("D2: 0x%02x, ", __RX_frame.data.u8[2]);
-			printf("D3: 0x%02x, ", __RX_frame.data.u8[3]);
-			printf("D4: 0x%02x, ", __RX_frame.data.u8[4]);
-			printf("D5: 0x%02x, ", __RX_frame.data.u8[5]);
-			printf("D6: 0x%02x, ", __RX_frame.data.u8[6]);
-			printf("D7: 0x%02x\n", __RX_frame.data.u8[7]);
-			printf("==============================================================================\n");
+			printf("0x%02x ", __RX_frame.data.u8[0]);
+			printf("0x%02x ", __RX_frame.data.u8[1]);
+			printf("0x%02x ", __RX_frame.data.u8[2]);
+			printf("0x%02x ", __RX_frame.data.u8[3]);
+			printf("0x%02x ", __RX_frame.data.u8[4]);
+			printf("0x%02x ", __RX_frame.data.u8[5]);
+			printf("0x%02x ", __RX_frame.data.u8[6]);
+			printf("0x%02x\n", __RX_frame.data.u8[7]);
 
 			// Check if frame is OBD query
 			if (__RX_frame.MsgID == 0x7df) {

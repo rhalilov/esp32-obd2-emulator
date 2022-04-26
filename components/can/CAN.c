@@ -183,30 +183,6 @@ void twai_regs_print(void)
 	printf("MODULE_CAN->CDR.B.CAN_M = %d             //CDR.7 Register Layout. Basic:0 Extended:1 (PELICAN mode)\n",
 												MODULE_CAN->CDR.B.CAN_M);
 
-	printf("MODULE_CAN->IER.B.RIE = %d              //IER.0 Receive Interrupt Enable\n",
-												MODULE_CAN->IER.B.RIE);
-
-	printf("MODULE_CAN->IER.B.TIE = %d              //IER.1 Transmit Interrupt Enable\n",
-												MODULE_CAN->IER.B.TIE);
-
-	printf("MODULE_CAN->IER.B.EIE = %d              //IER.2 Error Interrupt Enable\n",
-												MODULE_CAN->IER.B.EIE);
-
-	printf("MODULE_CAN->IER.B.DOIE = %d              //IER.3 Data Overrun Interrupt Enable\n",
-												MODULE_CAN->IER.B.DOIE);
-
-	printf("MODULE_CAN->IER.B.BPR_DIV = %d              //IER.4 prescale BRP by 2. ESP32 Rev2 and later\n",
-												MODULE_CAN->IER.B.WUIE);
-
-	printf("MODULE_CAN->IER.B.EPIE = %d              //IER.5 Error Passive Interrupt Enable\n",
-												MODULE_CAN->IER.B.EPIE);
-
-	printf("MODULE_CAN->IER.B.ALIE = %d              //IER.6 Arbitration Lost Interrupt Enable\n",
-												MODULE_CAN->IER.B.ALIE);
-
-	printf("MODULE_CAN->IER.B.BEIE = %d              //IER.7 Bus Error Interrupt Enable\n",
-												MODULE_CAN->IER.B.BEIE);
-
 	printf("MODULE_CAN->BTR0.B.BRP = %d              //BTR0[5:0] Baud Rate Prescaler\n",
 												MODULE_CAN->BTR0.B.BRP);
 
@@ -221,6 +197,30 @@ void twai_regs_print(void)
 
 	printf("MODULE_CAN->BTR1.B.SAM = %d              //BTR1.7 Sampling\n",
 												MODULE_CAN->BTR1.B.SAM);
+
+	printf("MODULE_CAN->IER.B.RIE = %d              //IER.0 Receive Interrupt Enable\n",
+												MODULE_CAN->IER.B.RIE);
+
+	printf("MODULE_CAN->IER.B.TIE = %d              //IER.1 Transmit Interrupt Enable\n",
+												MODULE_CAN->IER.B.TIE);
+
+	printf("MODULE_CAN->IER.B.EIE = %d              //IER.2 Error Interrupt Enable\n",
+												MODULE_CAN->IER.B.EIE);
+
+	printf("MODULE_CAN->IER.B.DOIE = %d              //IER.3 Data Overrun Interrupt Enable\n",
+												MODULE_CAN->IER.B.DOIE);
+
+	printf("MODULE_CAN->IER.B.BPR_DIV = %d           //IER.4 prescale BRP by 2. ESP32 Rev2 and later\n",
+												MODULE_CAN->IER.B.WUIE);
+
+	printf("MODULE_CAN->IER.B.EPIE = %d              //IER.5 Error Passive Interrupt Enable\n",
+												MODULE_CAN->IER.B.EPIE);
+
+	printf("MODULE_CAN->IER.B.ALIE = %d              //IER.6 Arbitration Lost Interrupt Enable\n",
+												MODULE_CAN->IER.B.ALIE);
+
+	printf("MODULE_CAN->IER.B.BEIE = %d              //IER.7 Bus Error Interrupt Enable\n",
+												MODULE_CAN->IER.B.BEIE);
 
 	printf("MODULE_CAN->MBX_CTRL.ACC.CODE[0] = 0x%02x //Acceptance Code (Message ID)\n",
 												MODULE_CAN->MBX_CTRL.ACC.CODE[0]);
@@ -277,30 +277,33 @@ int CAN_init() {
 	MODULE_CAN->BTR1.B.TSEG2 = 0x1;
 
 	// select time quantum and set TSEG1
-	switch (CAN_cfg.speed) {
-	case CAN_SPEED_1000KBPS:
-		MODULE_CAN->BTR1.B.TSEG1 = 0x4;
-		__tq = 0.125;
-		break;
-
-	case CAN_SPEED_800KBPS:
-		MODULE_CAN->BTR1.B.TSEG1 = 0x6;
-		__tq = 0.125;
-		break;
-
-	case CAN_SPEED_200KBPS:
-		MODULE_CAN->BTR1.B.TSEG1 = 0xc;
-		MODULE_CAN->BTR1.B.TSEG2 = 0x5;
-		__tq = 0.25;
-		break;
-
-	default:
-		MODULE_CAN->BTR1.B.TSEG1 = 0xc;
-		__tq = ((float) 1000 / CAN_cfg.speed) / 16;
-	}
+//	switch (CAN_cfg.speed) {
+//	case CAN_SPEED_1000KBPS:
+//		MODULE_CAN->BTR1.B.TSEG1 = 0x4;
+//		__tq = 0.125;
+//		break;
+//
+//	case CAN_SPEED_800KBPS:
+//		MODULE_CAN->BTR1.B.TSEG1 = 0x6;
+//		__tq = 0.125;
+//		break;
+//
+//	case CAN_SPEED_200KBPS:
+//		MODULE_CAN->BTR1.B.TSEG1 = 0xc;
+//		MODULE_CAN->BTR1.B.TSEG2 = 0x5;
+//		__tq = 0.25;
+//		break;
+//
+//	default:
+//		MODULE_CAN->BTR1.B.TSEG1 = 0xc;
+//		__tq = ((float) 1000 / CAN_cfg.speed) / 16;
+//	}
+	MODULE_CAN->BTR1.B.TSEG1 = 14;
+	MODULE_CAN->BTR1.B.TSEG2 = 3;
 
 	// set baud rate prescaler
-	MODULE_CAN->BTR0.B.BRP = (uint8_t) round((((APB_CLK_FREQ * __tq) / 2) - 1) / 1000000) - 1;
+//	MODULE_CAN->BTR0.B.BRP = (uint8_t) round((((APB_CLK_FREQ * __tq) / 2) - 1) / 1000000) - 1;
+	MODULE_CAN->BTR0.B.BRP = 3;
 
 	/* Set sampling
 	 * 1 -> triple; the bus is sampled three times; recommended for low/medium speed buses     (class A and B) where
@@ -308,8 +311,18 @@ int CAN_init() {
 	 * buses (SAE class C)*/
 	MODULE_CAN->BTR1.B.SAM = 0x1;
 
+	MODULE_CAN->IER.B.WUIE = 0;	//This is not interrupt control bit
+
 	// enable all interrupts
-	MODULE_CAN->IER.U = 0xff;
+//	MODULE_CAN->IER.U = 0xff;
+	MODULE_CAN->IER.B.RIE = 1;
+	MODULE_CAN->IER.B.TIE = 1;
+	MODULE_CAN->IER.B.EIE = 1;
+	MODULE_CAN->IER.B.DOIE = 1;
+	MODULE_CAN->IER.B.EPIE = 1;
+	MODULE_CAN->IER.B.ALIE = 1;
+	MODULE_CAN->IER.B.BEIE = 1;
+
 
 	// no acceptance filtering, as we want to fetch all messages
 	MODULE_CAN->MBX_CTRL.ACC.CODE[0] = 0;
